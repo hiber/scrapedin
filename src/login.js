@@ -2,7 +2,7 @@ const openPage = require('./openPage')
 const logger = require('./logger')
 
 module.exports = async (browser, email, password) => {
-  const loginUrl = 'https://www.linkedin.com/uas/login'
+  const loginUrl = 'https://www.linkedin.com/login'
   const page = await openPage(browser, loginUrl)
   logger.info('login', `logging at: ${loginUrl}`)
 
@@ -14,8 +14,8 @@ module.exports = async (browser, email, password) => {
   await page.$('#password')
     .then((passwordElement) => passwordElement.type(password))
 
-  await page.$('.login__form_action_container button')
-    .then((button) => button.click())
+  await page.$x("//button[contains(text(), 'Sign in')]")
+    .then((button) => button[0].click())
 
   return page.waitFor('input[role=combobox]', {
     timeout: 15000
